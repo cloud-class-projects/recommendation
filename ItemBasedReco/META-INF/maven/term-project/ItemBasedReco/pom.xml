@@ -1,0 +1,81 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>term-project</groupId>
+  <artifactId>ItemBasedReco</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>ItemBasedReco</name>
+  <description>Item Based Recommendation Algorithm</description>
+  
+  
+    	<dependencies>
+  	
+  		<dependency>
+  			<groupId>org.apache.hadoop</groupId>
+  			<artifactId>hadoop-common</artifactId>
+  			<version>2.5.0-cdh5.2.0</version>
+  		</dependency>
+  		
+  		
+  		<dependency>
+  			<groupId>org.apache.hadoop</groupId>
+  			<artifactId>hadoop-mapreduce-client-core</artifactId>
+  			<version>2.5.0-cdh5.2.0</version>
+  		</dependency>
+  		
+  		<dependency>
+  			<groupId>org.apache.hadoop</groupId>
+  			<artifactId>hadoop-mapreduce-client-common</artifactId>
+  			<version>2.5.0-cdh5.2.0</version>
+  		</dependency>
+  		
+  		
+  		<dependency>
+  			<groupId>org.apache.hbase</groupId>
+  			<artifactId>hbase-client</artifactId>
+  			<version>0.98.6-cdh5.2.0</version>
+  		</dependency>
+  		
+  		<dependency>
+  			<groupId>org.apache.hbase</groupId>
+  			<artifactId>hbase-common</artifactId>
+  			<version>0.98.6-cdh5.2.0</version>
+  		</dependency>
+  		
+  		<dependency>
+  			<groupId>org.apache.hbase</groupId>
+  			<artifactId>hbase-server</artifactId>
+  			<version>0.98.6-cdh5.2.0</version>
+  		</dependency>
+  		
+  		<dependency>
+  			<groupId>org.apache.hbase</groupId>
+  			<artifactId>hbase-hadoop2-compat</artifactId>
+  			<version>0.98.6-cdh5.2.0</version>
+  		</dependency>
+  	</dependencies>
+  	
+  	<repositories>
+  		<repository>
+  		<id>Hadoop Repository</id>
+  		<name>Hadoop Repository for Jars</name>
+  		<url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
+  		</repository>
+  		
+  	
+  	</repositories>
+  	
+  	
+  	<build>
+		<plugins>
+			<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>2.3.1</version>
+			<configuration>
+				<source>1.7</source>
+				<target>1.7</target>
+			</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

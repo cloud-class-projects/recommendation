@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Built-By: Naveen Reddy
+Build-Jdk: 1.7.0_25
+Created-By: Apache Maven 3.2.1
+Archiver-Version: Plexus Archiver
+
