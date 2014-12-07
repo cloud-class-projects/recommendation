@@ -4,16 +4,33 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Reducer.Context;
+import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 public class CoOccurrenceReducer
   extends Reducer<Text, Text, Text, Text>
 {
+	
+  private MultipleOutputs multiOutput;
+  
   Logger logger = Logger.getLogger(CoOccurrenceReducer.class);
+  
+  
+  /*
+   * (non-Javadoc)
+   * @see org.apache.hadoop.mapreduce.Reducer#setup(org.apache.hadoop.mapreduce.Reducer.Context)
+   * This method is for creating the multiOutputs object which would be used for writing the output key value pairs
+   */
+  public void setup(Context context){
+	  
+	  multiOutput = new MultipleOutputs(context);
+  }
+  
   
   public void reduce(Text key, Iterable<Text> values, Reducer<Text, Text, Text, Text>.Context context)
   {
@@ -44,7 +61,7 @@ public class CoOccurrenceReducer
     try
     {
       this.logger.info("Context object:" + str);
-      context.write(key, new Text(str.toString()));
+      multiOutput.write("Co",key, new Text(str.toString()));
     }
     catch (IOException|InterruptedException e)
     {

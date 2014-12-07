@@ -1,11 +1,14 @@
-com\naveen\constants\Constants.class
 com\naveen\reducer\DataScrubReducer.class
+com\naveen\constants\Constants.class
 com\naveen\reducer\MergeMatrixItemReducer.class
 com\naveen\drivers\MergeMatrixItemDriver.class
 com\naveen\mapper\MergeMatrixItemMapper.class
+com\naveen\drivers\MatrixProductDriver.class
 com\naveen\drivers\CoOccurrenceMatrix.class
 com\naveen\drivers\DataScrub.class
 com\naveen\mapper\CoOccurrenceMapper.class
+com\naveen\mapper\MatrixProductMapper.class
+com\naveen\reducer\MatrixProductReducer.class
 com\naveen\drivers\ItemVectorDriver.class
 com\naveen\reducer\CoOccurrenceReducer.class
 com\naveen\mapper\DataScrubMapper.class

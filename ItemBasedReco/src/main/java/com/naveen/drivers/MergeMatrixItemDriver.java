@@ -73,7 +73,7 @@ public class MergeMatrixItemDriver
       job.setMapperClass(MergeMatrixItemMapper.class);
       job.setReducerClass(MergeMatrixItemReducer.class);
       
-      job.setMapOutputKeyClass(LongWritable.class);
+      job.setMapOutputKeyClass(Text.class);
       
       job.setMapOutputValueClass(Text.class);
       

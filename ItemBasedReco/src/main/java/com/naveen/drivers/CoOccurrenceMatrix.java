@@ -2,7 +2,9 @@ package com.naveen.drivers;
 
 import com.naveen.mapper.CoOccurrenceMapper;
 import com.naveen.reducer.CoOccurrenceReducer;
+
 import java.io.IOException;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -11,6 +13,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
@@ -74,6 +78,7 @@ public class CoOccurrenceMatrix extends Configured implements Tool{
       
       job.setNumReduceTasks(9);
       
+      MultipleOutputs.addNamedOutput(job, "Co", TextOutputFormat.class, TextOutputFormat.class, TextOutputFormat.class);
       FileSystem fs = FileSystem.get(conf);
       
       FileInputFormat.setInputPaths(job, new Path[] { inputPath });
