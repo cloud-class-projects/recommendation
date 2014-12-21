@@ -4,6 +4,8 @@ import com.naveen.mapper.CoOccurrenceMapper;
 import com.naveen.reducer.CoOccurrenceReducer;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -18,7 +20,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+
 
 public class CoOccurrenceMatrix extends Configured implements Tool{
   static Logger logger = Logger.getLogger(CoOccurrenceMatrix.class);
@@ -26,14 +28,7 @@ public class CoOccurrenceMatrix extends Configured implements Tool{
   public static void main(String[] args)
   {
     
-	//Loading the log4j property file
-	PropertyConfigurator.configure("/home/naveen/log4j.properties");
-    
-	//Input file location
-    args[0] = "/user/naveen/UserVectors";
-    
-    //Output file location
-    args[1] = "/user/naveen/Co-occurrenceVectors";
+	  
     try
     {
       ToolRunner.run(new Configuration(), new CoOccurrenceMatrix(), args);
@@ -47,6 +42,40 @@ public class CoOccurrenceMatrix extends Configured implements Tool{
   public int run(String[] args)
     throws Exception
   {
+	  
+	    //Load the property file which has the input and output file directory names
+	    
+		Properties prop = new Properties();
+		
+		String propFileName = "/Parameters.properties";
+		
+		InputStream inputStream = null;
+		
+		try{
+		    logger.info("Inside the try block");
+		    //inputStream = new FileInputStream(propFileName);
+			
+			inputStream = getClass().getResourceAsStream(propFileName);
+			
+			logger.info("Naveen1:" + inputStream);
+			prop.load(inputStream);
+			
+			logger.info("Naveen2");
+			
+		    args[0] = prop.getProperty("DataScrubOutput");
+		    
+		    args[1] = prop.getProperty("CoOccurrenceOutput");
+		    
+
+
+		}
+		
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	  
+	  
+	  
     boolean jobStatus = false;
     logger.info("Inside the run method");
     
@@ -76,7 +105,7 @@ public class CoOccurrenceMatrix extends Configured implements Tool{
       
       job.setMapOutputValueClass(Text.class);
       
-      job.setNumReduceTasks(9);
+      job.setNumReduceTasks(4);
       
       MultipleOutputs.addNamedOutput(job, "Co", TextOutputFormat.class, TextOutputFormat.class, TextOutputFormat.class);
       FileSystem fs = FileSystem.get(conf);

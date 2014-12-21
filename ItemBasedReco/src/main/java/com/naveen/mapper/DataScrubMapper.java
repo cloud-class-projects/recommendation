@@ -7,6 +7,9 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 import org.apache.log4j.Logger;
 
+/*
+ * This Class is for processing the input file which consists of user ids and ratings.
+ */
 public class DataScrubMapper
   extends Mapper<LongWritable, Text, Text, Text>
 {
@@ -18,7 +21,7 @@ public class DataScrubMapper
     
 
 
-
+    //Below code splits the string into two strings of userids and ratings 
     String[] input = value.toString().split("\t");
     StringBuilder str = new StringBuilder(input[1]);
     str.append(":");

@@ -4,6 +4,8 @@ import com.naveen.mapper.ItemVectorMapper;
 import com.naveen.reducer.ItemVectorReducer;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -18,7 +20,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+
 
 public class ItemVectorDriver
   extends Configured
@@ -28,11 +30,8 @@ public class ItemVectorDriver
   
   public static void main(String[] args)
   {
-    PropertyConfigurator.configure("/home/naveen/log4j.properties");
     
-    args[0] = "/user/naveen/UserVectors";
-    
-    args[1] = "/user/naveen/ItemVectors";
+	
     try
     {
       ToolRunner.run(new Configuration(), new ItemVectorDriver(), args);
@@ -49,6 +48,41 @@ public class ItemVectorDriver
     boolean jobStatus = false;
     logger.info("Inside the run method");
     
+    
+    
+    //Load the property file which has the input and output file directory names
+    
+	Properties prop = new Properties();
+	
+	String propFileName = "/Parameters.properties";
+	
+	InputStream inputStream = null;
+	
+	try{
+	    logger.info("Inside the try block");
+	    //inputStream = new FileInputStream(propFileName);
+		
+		inputStream = getClass().getResourceAsStream(propFileName);
+		
+		logger.info("Naveen1:" + inputStream);
+		prop.load(inputStream);
+		
+		logger.info("Naveen2");
+		
+	    args[0] = prop.getProperty("DataScrubOutput");
+	    
+	    args[1] = prop.getProperty("ItemVectorOutput");
+	    
+
+
+	}
+	
+	catch(Exception e){
+		e.printStackTrace();
+	}
+	
+	
+	
     Configuration conf = getConf();
     try
     {
@@ -75,7 +109,7 @@ public class ItemVectorDriver
       
       MultipleOutputs.addNamedOutput(job, "ItemVector", TextOutputFormat.class, TextOutputFormat.class, TextOutputFormat.class);
       
-      job.setNumReduceTasks(9);
+      job.setNumReduceTasks(4);
       
       FileSystem fs = FileSystem.get(conf);
       

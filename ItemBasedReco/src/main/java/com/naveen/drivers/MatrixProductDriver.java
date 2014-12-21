@@ -3,6 +3,8 @@ package com.naveen.drivers;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -11,13 +13,15 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 import com.naveen.mapper.MatrixProductMapper;
+import com.naveen.reducer.MatrixProductCombiner;
 import com.naveen.reducer.MatrixProductReducer;
 
 public class MatrixProductDriver
@@ -28,12 +32,8 @@ public class MatrixProductDriver
   
   public static void main(String[] args)
   {
-    PropertyConfigurator.configure("/home/naveen/log4j.properties");
-    
-    
-    args[0] = "/user/naveen/MegeVector";
-    
-    args[1] = "/user/naveen/MatrixProduct";
+
+	  
     try
     {
       ToolRunner.run(new Configuration(), new MatrixProductDriver(), args);
@@ -47,6 +47,38 @@ public class MatrixProductDriver
   public int run(String[] args)
     throws Exception
   {
+	  
+		Properties prop = new Properties();
+		
+		String propFileName = "/Parameters.properties";
+		
+		InputStream inputStream = null;
+		
+		try{
+		    logger.info("Inside the try block");
+		    //inputStream = new FileInputStream(propFileName);
+			
+			inputStream = getClass().getResourceAsStream(propFileName);
+			
+			logger.info("Naveen1:" + inputStream);
+			prop.load(inputStream);
+			
+			logger.info("Naveen2");
+			
+		    args[0] = prop.getProperty("MergeVectorOutput");
+		    
+		    args[1] = prop.getProperty("ProductOutput");
+		    
+
+
+		}
+		
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	  
+	  
+	  
     boolean jobStatus = false;
     logger.info("Inside the run method");
     
@@ -69,14 +101,20 @@ public class MatrixProductDriver
       logger.info("Before setting up the job");
       job.setJarByClass(MatrixProductDriver.class);
       
+      
       job.setMapperClass(MatrixProductMapper.class);
       job.setReducerClass(MatrixProductReducer.class);
+      job.setCombinerClass(MatrixProductCombiner.class);
       
       job.setMapOutputKeyClass(Text.class);
       
       job.setMapOutputValueClass(Text.class);
       
-      job.setNumReduceTasks(1);
+      job.setOutputKeyClass(Text.class);
+      
+      job.setOutputValueClass(Text.class);
+      
+      job.setNumReduceTasks(6);
       
       FileSystem fs = FileSystem.get(conf);
       

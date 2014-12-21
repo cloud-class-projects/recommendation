@@ -2,7 +2,12 @@ package com.naveen.drivers;
 
 import com.naveen.mapper.DataScrubMapper;
 import com.naveen.reducer.DataScrubReducer;
+
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -23,9 +28,8 @@ public class DataScrub
   
   public static void main(String[] args)
   {
-    args[0] = "/user/naveen/Input";
-    
-    args[1] = "/user/naveen/UserVectors";
+	
+	
     try
     {
       ToolRunner.run(new Configuration(), new DataScrub(), args);
@@ -36,11 +40,60 @@ public class DataScrub
     }
   }
   
+  
+  
+  //Method to print the stack trace
+  public static String StackTraceToString(Exception ex) {
+      String result = ex.toString() + "\n";
+      StackTraceElement[] trace = ex.getStackTrace();
+      for (int i=0;i<trace.length;i++) {
+          result += trace[i].toString() + "\n";
+      }
+      return result;
+  }
+  
+  
   public int run(String[] args)
     throws Exception
   {
     boolean jobStatus = false;
     logger.info("Inside the run method");
+    
+    //Loading the property file which has the input and output directory details
+    
+    
+	Properties prop = new Properties();
+	
+	String propFileName = "/Parameters.properties";
+	
+	InputStream inputStream = null;
+	
+	try{
+	    logger.info("Inside the try block");
+	    //inputStream = new FileInputStream(propFileName);
+		
+		inputStream = getClass().getResourceAsStream(propFileName);
+		
+		logger.info("Naveen1:" + inputStream);
+		prop.load(inputStream);
+		
+		logger.info("Naveen2");
+		
+	    args[0] = prop.getProperty("DataScrubInput");
+	    
+	    args[1] = prop.getProperty("DataScrubOutput");
+	    
+
+
+	}
+	
+	catch(Exception e){
+		logger.info("Printing the stack trace" + StackTraceToString(e));
+		e.printStackTrace();
+	}
+    
+    
+    
     
     Configuration conf = getConf();
     try
@@ -66,7 +119,7 @@ public class DataScrub
       
       job.setMapOutputValueClass(Text.class);
       
-      job.setNumReduceTasks(9);
+      job.setNumReduceTasks(4);
       
       FileSystem fs = FileSystem.get(conf);
       
